@@ -1,13 +1,15 @@
 module S3MediaServerApi
   module Media
-    class MediaApiError < S3MediaServerApiError; end
-    class CreationError < MediaApiError ; end
+    class CommonMediaApiError < S3MediaServerApiError; end
+    class CreationError < CommonMediaApiError ; end
 
-    class MediaApi
+    class CommonMediaApi
 
       class << self
 
-        def create(aws_file_uuid, type)
+        def create(path, type)
+          aws_file_response = Uploader.upload(path)
+          aws_file_uuid = aws_file_response[:data][:uuid]
           params = (type == 'video') ? { uuid: aws_file_uuid } : { aws_file_uuid: aws_file_uuid }
           response = Asynk::Publisher.sync_publish("s3_media_server.media.#{type}.create", params)
           raise CreationError.new(response[:body]) unless response.success?

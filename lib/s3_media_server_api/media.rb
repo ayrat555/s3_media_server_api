@@ -1,4 +1,4 @@
-require 's3_media_server_api/media/media_api'
+require 's3_media_server_api/media/common_media_api'
 require 's3_media_server_api/media/image'
 require 's3_media_server_api/media/video'
 require 's3_media_server_api/media/audio'

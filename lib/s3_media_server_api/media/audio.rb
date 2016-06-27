@@ -6,17 +6,22 @@ module S3MediaServerApi
       class << self
 
         def create(path)
-          aws_file_response = Uploader.upload(path)
-          aws_file_uuid = aws_file_response[:data][:uuid]
-          MediaApi.create(aws_file_uuid, AUDIO)
+          CommonMediaApi.create(path, AUDIO)
         end
 
         def resolve(uuid)
-          MediaApi.resolve(uuid, AUDIO)
+          CommonMediaApi.resolve(uuid, AUDIO)
         end
 
         def destroy(uuid)
-          MediaApi.destroy(uuid, AUDIO)
+          CommonMediaApi.destroy(uuid, AUDIO)
+        end
+
+        def cut(uuid, audio_url, duration, start_position)
+          Asynk::Publisher.publish('media_processor.audio.cut', uuid: uuid,
+                                                                audio_url: audio_url,
+                                                                duration: duration,
+                                                                start_position: start_position)
         end
       end
     end

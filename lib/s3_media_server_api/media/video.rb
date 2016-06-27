@@ -6,17 +6,15 @@ module S3MediaServerApi
       class << self
 
         def create(path)
-          aws_file_response = Uploader.upload(path)
-          aws_file_uuid = aws_file_response[:data][:uuid]
-          MediaApi.create(aws_file_uuid, VIDEO)
+          CommonMediaApi.create(path, VIDEO)
         end
 
         def resolve(uuid)
-          MediaApi.resolve(uuid, VIDEO)
+          CommonMediaApi.resolve(uuid, VIDEO)
         end
 
         def destroy(uuid)
-          MediaApi.destroy(uuid, VIDEO)
+          CommonMediaApi.destroy(uuid, VIDEO)
         end
       end
     end
