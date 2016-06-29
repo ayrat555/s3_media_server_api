@@ -4,9 +4,13 @@ module S3MediaServerApi
       AUDIO = 'audio'
 
       class << self
-
-        def media_type; AUDIO; end
-
+        #
+        # sends request to cut audio file
+        # parameters: uuid - uuid of file
+        #             audio_url - url of audio file
+        #             duration  - duration of audio file
+        #             start_position - position where cut wil be made
+        #
         def cut(uuid, audio_url, duration, start_position)
           params = {
                      uuid: uuid,
@@ -16,6 +20,9 @@ module S3MediaServerApi
                     }
           custom_async_request(:cut, params)
         end
+
+        private
+          def media_type; AUDIO; end
       end
     end
   end

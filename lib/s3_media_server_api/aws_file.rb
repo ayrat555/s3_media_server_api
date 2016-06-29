@@ -5,7 +5,12 @@ module S3MediaServerApi
       class AwsFileError < S3MediaServerApiError; end
       class FileCreationError < AwsFileError; end
       class CompleteUploadError < AwsFileError; end
-
+      #
+      # creates file on s3_media_server
+      # parameters: file_path - path on file system to file
+      #
+      # returns: response with created file
+      #
       def create(file_path)
         params = {
                    size: File.size(file_path),
@@ -15,16 +20,30 @@ module S3MediaServerApi
         raise FileCreationError.new(response[:body]) unless response.success?
         response
       end
-
-      def show(uuid)
-
+      #
+      # fetches media file
+      # parameters: uuid - uuid of file
+      #
+      # returns: response with file information
+      #
+      def reolve(uuid)
+        AsynkRequest.sync_request(base_path, :resolve, uuid: uuid)
       end
-
-      def get_signed_upload_url(aws_file_uuid, part_number)
-        response = AsynkRequest.sync_request(:uploads, :show, aws_file_uuid: aws_file_uuid, uuid: part_number)
+      #
+      # fetches signed upload url to upload specified part number
+      # parameters: uuid - file uuid
+      #             part_numer - part number that will be uploaded
+      #
+      # returns:  signed upload url
+      #
+      def get_signed_upload_url(uuid, part_number)
+        response = AsynkRequest.sync_request(:uploads, :show, aws_file_uuid: uuid, uuid: part_number)
         response[:data][:upload_url]
       end
-
+      #
+      # completes multipart upload
+      # parameters: uuid - file uuid
+      #
       def complete_upload(uuid)
         response = AsynkRequest.sync_request(base_path, :complete_upload, uuid: uuid)
         raise CompleteUploadError.new(response[:body]) unless response.success?

@@ -4,13 +4,24 @@ require 'parallel'
 require 'faraday'
 
 module S3MediaServerApi
+
+  # Module with file uplod finctionality implementation
+
   module Uploader
 
     class << self
 
       class UploaderError < S3MediaServerApiError; end
       class PartUploadError < UploaderError; end
-
+      #
+      # uploads file to amazon s3 and create AwsFile object
+      # parameter : filepath - file path in file system
+      # returns: [AwsFile object]
+      #
+      # Example
+      #
+      # file = S3MediaServerApi::Uploader.upload(/home/vasya/my_awesome_file.awesome)
+      #
       def upload(file_path)
         parts = []
         response = AwsFile.create(file_path)
@@ -29,13 +40,21 @@ module S3MediaServerApi
       end
 
       private
-
+        #
+        # closes all parts of file that were used in multipart upload to prevent memory leak
+        #
         def close_all_parts(parts)
           parts.each do |part|
             part[:body].close
           end
         end
-
+        #
+        # divides file into parts for multipart upload
+        # parameter:
+        #            source            - path of source file
+        #            default_part_size -  wanted part size (in bytes)
+        # returns:   [ array of parts ]
+        #
         def compute_parts(source, default_part_size)
           size = File.size(source)
           offset, part_number, parts = 0, 1, []
@@ -50,7 +69,13 @@ module S3MediaServerApi
           end
           parts
         end
-
+        #
+        # calculates size of one part - last part often has smaller size than other parts
+        # parameters: total_size - totol size of file (in bytes)
+        #             part_size  - default size of one part (in bytes)
+        #             offset     - offset from beginning of file (in bytes)
+        # returns: part size
+        #
         def part_size(total_size, part_size, offset)
           if offset + part_size > total_size
             total_size - offset
@@ -58,13 +83,20 @@ module S3MediaServerApi
             part_size
           end
         end
-
+        #
+        # uploads data to specified url
+        # parameters: url - upload url
+        #             data  - data to upload
+        # returns: true if upload was successful
+        #          false otherwise
+        #
         def upload_part(url, data)
           conn = Faraday.new(url: url) do |faraday|
             faraday.adapter :net_http
           end
           resp = conn.put do |req|
             req.body = data
+            # to prevent Faraday from adding garbage header
             req.headers['Content-Type'] = ''
           end
           resp.success?

@@ -5,8 +5,9 @@ module S3MediaServerApi
 
       class << self
 
-        def media_type; VIDEO; end
+        private
 
+          def media_type; VIDEO; end
       end
     end
   end
