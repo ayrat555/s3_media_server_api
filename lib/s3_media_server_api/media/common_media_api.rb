@@ -7,22 +7,36 @@ module S3MediaServerApi
 
       class << self
 
-        def create(path, type)
+        def create(path)
           aws_file_response = Uploader.upload(path)
           aws_file_uuid = aws_file_response[:data][:uuid]
-          params = (type == 'video') ? { uuid: aws_file_uuid } : { aws_file_uuid: aws_file_uuid }
-          response = Asynk::Publisher.sync_publish("s3_media_server.media.#{type}.create", params)
+          params = (media_type == 'video') ? { uuid: aws_file_uuid } : { aws_file_uuid: aws_file_uuid }
+          response = AsynkRequest.sync_request(base_path, :create, params)
           raise CreationError.new(response[:body]) unless response.success?
           response
         end
 
-        def destroy(uuid, type)
-          Asynk::Publisher.publish("s3_media_server.media.#{type}.destroy", uuid: uuid)
+        def destroy(uuid)
+          AsynkRequest.async_request(base_path, :destroy, uuid: uuid)
         end
 
-        def resolve(uuid, type)
-          Asynk::Publisher.sync_publish("s3_media_server.media.#{type}.resolve", uuid: uuid)
+        def resolve(uuid)
+          AsynkRequest.sync_request(base_path, :resolve, uuid: uuid)
         end
+
+        def custom_sync_request(action, params)
+          AsynkRequest.sync_request(base_path, action, params)
+        end
+
+        def custom_async_request(action, params)
+          AsynkRequest.async_request(base_path, action, params)
+        end
+
+        private
+
+          def media_type; end
+
+          def base_path; "media.#{media_type}"; end
       end
     end
   end

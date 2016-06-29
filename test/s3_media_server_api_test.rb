@@ -27,7 +27,7 @@ class S3MediaServerApiTest < Minitest::Test
     resolve_response = S3MediaServerApi::Media::Image.resolve(uuid)
     assert_equal "unprocessable_entity", resolve_response.status, 'Image wasnt destroyed'
   end
-
+  #
   def test_video_api
     response = S3MediaServerApi::Media::Video.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
     uuid = response[:data][:uuid]

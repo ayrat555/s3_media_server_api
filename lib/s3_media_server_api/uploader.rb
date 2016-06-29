@@ -9,41 +9,26 @@ module S3MediaServerApi
     class << self
 
       class UploaderError < S3MediaServerApiError; end
-      class FileCreationError < UploaderError; end
       class PartUploadError < UploaderError; end
-      class CompleteUploadError < UploaderError; end
 
       def upload(file_path, upload_threads_count = 4)
         parts = []
-        mime_type = file_mime_type(file_path)
-
-        response = Asynk::Publisher.sync_publish('s3_media_server.aws_file.create', action: :create,
-          size: File.size(file_path), mime_type: mime_type)
-        raise FileCreationError.new(response[:body]) unless response.success?
-
+        response = AwsFile.create(file_path)
         default_part_size = response[:data][:default_part_size]
         aws_file_uuid = response[:data][:uuid]
         uploads_count = response[:data][:uploads_count]
         parts = compute_parts(file_path, default_part_size)
         Parallel.each(parts, in_threads: upload_threads_count) do |part|
-          response = Asynk::Publisher.sync_publish('s3_media_server.uploads.show', action: :show, aws_file_uuid: aws_file_uuid, uuid: part[:part_number])
-          upload_url = response[:data][:upload_url]
-          raise PartUploadError.new(response[:body]) unless upload_part(upload_url, part[:body].read)
+          signed_upload_url = AwsFile.get_signed_upload_url(aws_file_uuid, part[:part_number])
+          raise PartUploadError.new(response[:body]) unless upload_part(signed_upload_url, part[:body].read)
         end
 
-        response = Asynk::Publisher.sync_publish('s3_media_server.aws_file.complete_upload', action: :complete_upload, uuid: aws_file_uuid)
-        raise CompleteUploadError.new(response[:body]) unless response.success?
-        response
+        AwsFile.complete_upload(aws_file_uuid)
       ensure
         close_all_parts(parts)
       end
 
       private
-
-        def file_mime_type(file_source_path)
-          mime_magic = MimeMagic.by_magic(File.open(file_source_path))
-          mime_magic ? mime_magic.type : 'application/octet-stream'
-        end
 
         def close_all_parts(parts)
           parts.each do |part|
