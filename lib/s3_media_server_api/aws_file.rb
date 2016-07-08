@@ -1,6 +1,46 @@
 module S3MediaServerApi
   class AwsFile
 
+    def initialize(response)
+      @params = response[:data]
+    end
+
+    def uuid
+      @params[:uuid]
+    end
+
+    def size
+      @params[:size]
+    end
+
+    def mime_type
+      @params[:mime_type]
+    end
+
+    def uploads_count
+      @params[:uploads_count]
+    end
+
+    def default_part_size
+      @params[:default_part_size]
+    end
+
+    def state
+      @params[:state]
+    end
+
+    def public_url
+      @params[:public_url]
+    end
+
+    def name
+      @params[:name]
+    end
+
+    def as_hash
+      @params
+    end
+
     class << self
       class AwsFileError < S3MediaServerApiError; end
       class FileCreationError < AwsFileError; end
@@ -11,14 +51,15 @@ module S3MediaServerApi
       #
       # returns: response with created file
       #
-      def create(file_path)
+      def create_from_path(file_path)
         params = {
                    size: File.size(file_path),
-                   mime_type: file_mime_type(file_path)
+                   mime_type: file_mime_type(file_path),
+                   name: File.basename(file_path)
                  }
         response = AsynkRequest.sync_request(base_path, :create, params)
         raise FileCreationError.new(response[:body]) unless response.success?
-        response
+        AwsFile.new(response)
       end
       #
       # fetches media file
@@ -47,7 +88,7 @@ module S3MediaServerApi
       def complete_upload(uuid)
         response = AsynkRequest.sync_request(base_path, :complete_upload, uuid: uuid)
         raise CompleteUploadError.new(response[:body]) unless response.success?
-        response
+        AwsFile.new(response)
       end
 
       private

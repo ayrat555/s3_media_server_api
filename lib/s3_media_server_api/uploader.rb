@@ -24,10 +24,10 @@ module S3MediaServerApi
       #
       def upload(file_path)
         parts = []
-        response = AwsFile.create(file_path)
-        default_part_size = response[:data][:default_part_size]
-        aws_file_uuid = response[:data][:uuid]
-        uploads_count = response[:data][:uploads_count]
+        file = AwsFile.create_from_path(file_path)
+        default_part_size = file.default_part_size
+        aws_file_uuid = file.uuid
+        uploads_count = file.uploads_count
         parts = compute_parts(file_path, default_part_size)
         Parallel.each(parts, in_threads: S3MediaServerApi.upload_thread_count) do |part|
           signed_upload_url = AwsFile.get_signed_upload_url(aws_file_uuid, part[:part_number])

@@ -5,29 +5,57 @@ class S3MediaServerApiTest < Minitest::Test
     refute_nil ::S3MediaServerApi::VERSION
   end
 
-  def test_image_api
-    response = S3MediaServerApi::Media::Image.create('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
-    uuid = response[:data][:uuid]
-    assert response.success?
-    resolve_response = S3MediaServerApi::Media::Image.resolve(uuid)
-    assert resolve_response.success?, 'Can not resolve image'
-
-    S3MediaServerApi::Media::Image.resize(uuid)
-    sleep(10)
-    resolve_response = S3MediaServerApi::Media::Image.resolve(uuid)
-    assert resolve_response[:data][:thumb], 'Thumb wasnt made'
-
-    copy_response = S3MediaServerApi::Media::Image.copy(uuid)
-    assert copy_response.success?, 'Image wasnt copied'
-    copy_uuid = copy_response[:data][:uuid]
-
-    S3MediaServerApi::Media::Image.destroy(uuid)
-    S3MediaServerApi::Media::Image.destroy(copy_uuid)
-    sleep(2)
-    resolve_response = S3MediaServerApi::Media::Image.resolve(uuid)
-    assert_equal "unprocessable_entity", resolve_response.status, 'Image wasnt destroyed'
+  def test_aws_file_response
+    aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+    assert aws_file.uuid, 'uuid wasnt set'
+    assert aws_file.size, 'size wasnt set'
+    assert aws_file.mime_type, 'mime_type wasnt set'
+    assert aws_file.uploads_count, 'uploads_count wasnt set'
+    assert aws_file.default_part_size, 'default_part_size wasnt set'
+    assert aws_file.state, 'state wasnt set'
+    assert aws_file.public_url, 'public_url wasnt set'
+    assert aws_file.name, 'name wasnt set'
   end
-  #
+
+  def test_image_api
+    created_image = S3MediaServerApi::Media::Image.create('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+    assert created_image.uuid
+    assert created_image.size
+    assert created_image.name
+    assert created_image.uuid
+    assert created_image.source.url
+
+    resolved_image = S3MediaServerApi::Media::Image.resolve(created_image.uuid)
+    assert resolved_image.size
+    assert resolved_image.name
+    assert resolved_image.uuid
+    assert resolved_image.source.url
+    assert_equal resolved_image.source.url, created_image.source.url
+
+
+    S3MediaServerApi::Media::Image.resize(created_image.uuid)
+    sleep(10)
+    thumbed_image = S3MediaServerApi::Media::Image.resolve(created_image.uuid)
+    assert thumbed_image.thumb.url
+    assert thumbed_image.thumb.width
+    assert thumbed_image.thumb.height
+
+
+    copied_image = S3MediaServerApi::Media::Image.copy(created_image.uuid)
+    assert copied_image.size
+    assert copied_image.name
+    assert copied_image.uuid
+    assert copied_image.source.url
+    assert copied_image.source.width
+    assert copied_image.source.height
+    assert copied_image.thumb.url
+    assert copied_image.thumb.width
+    assert copied_image.thumb.height
+
+    S3MediaServerApi::Media::Image.destroy(created_image.uuid)
+    S3MediaServerApi::Media::Image.destroy(copied_image.uuid)
+  end
+
   def test_video_api
     response = S3MediaServerApi::Media::Video.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
     uuid = response[:data][:uuid]

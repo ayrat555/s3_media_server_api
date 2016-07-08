@@ -3,7 +3,46 @@ module S3MediaServerApi
     class Image< CommonMediaApi
       IMAGE = 'image'
 
+      class ImageObject
+
+        def initialize(params)
+          @params = params
+        end
+
+        def url
+          @params[:url]
+        end
+
+        def width
+          @params[:width]
+        end
+
+        def height
+          @params[:height]
+        end
+
+        def as_hash
+          @params
+        end
+      end
+
+      def source
+        ImageObject.new(@params[:source])
+      end
+
+      def thumb
+        ImageObject.new(@params[:thumb])
+      end
+
       class << self
+
+        def create(path)
+          Image.new(super(path))
+        end
+
+        def resolve(uuid)
+          Image.new(super(uuid))
+        end
         #
         # copies image file
         # parameters: uuid - uuid of file
@@ -11,7 +50,7 @@ module S3MediaServerApi
         # returns: response with copied image
         #
         def copy(uuid)
-          custom_sync_request(:copy, uuid: uuid)
+          Image.new(custom_sync_request(:copy, uuid: uuid))
         end
         #
         # sends request to make thumb of image

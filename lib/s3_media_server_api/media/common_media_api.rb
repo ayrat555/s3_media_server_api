@@ -9,6 +9,26 @@ module S3MediaServerApi
     #
     class CommonMediaApi
 
+      def initialize(response)
+        @params = response[:data]
+      end
+
+      def uuid
+        @params[:uuid]
+      end
+
+      def name
+        @params[:name]
+      end
+
+      def size
+        @params[:size]
+      end
+
+      def as_hash
+        @params
+      end
+
       class << self
         #
         # creates media file
@@ -17,9 +37,9 @@ module S3MediaServerApi
         # returns: response with created AwsFile information
         #
         def create(path)
-          aws_file_response = Uploader.upload(path)
-          aws_file_uuid = aws_file_response[:data][:uuid]
-          params = (media_type == 'video') ? { uuid: aws_file_uuid } : { aws_file_uuid: aws_file_uuid }
+          aws_file = Uploader.upload(path)
+          uuid = aws_file.uuid
+          params = (media_type == 'video') ? { uuid: uuid } : { aws_file_uuid: uuid }
           response = AsynkRequest.sync_request(base_path, :create, params)
           raise CreationError.new(response[:body]) unless response.success?
           response
