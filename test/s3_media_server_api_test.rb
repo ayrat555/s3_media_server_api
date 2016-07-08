@@ -4,7 +4,7 @@ class S3MediaServerApiTest < Minitest::Test
   def test_that_it_has_a_version_number
     refute_nil ::S3MediaServerApi::VERSION
   end
-
+  
   def test_aws_file_response
     aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
     assert aws_file.uuid, 'uuid wasnt set'
@@ -81,20 +81,24 @@ class S3MediaServerApiTest < Minitest::Test
   end
 
   def test_audio_api
-    response = S3MediaServerApi::Media::Audio.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
-    uuid = response[:data][:uuid]
-    assert response.success?
-    resolve_response = S3MediaServerApi::Media::Audio.resolve(uuid)
-    assert resolve_response.success?, 'Can not resolve audio'
+    created_audio = S3MediaServerApi::Media::Audio.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+    resolved_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
+    assert resolved_audio.url
+    assert resolved_audio.uuid
+    assert resolved_audio.name
+    assert resolved_audio.size
 
-    S3MediaServerApi::Media::Audio.cut(uuid, response[:data][:url], 20, 40)
+    S3MediaServerApi::Media::Audio.cut(created_audio.uuid, created_audio.url, 20, 40)
     sleep(10)
-    resolve_response = S3MediaServerApi::Media::Audio.resolve(uuid)
-    assert resolve_response[:data][:sample_url], 'Audio wasnt cutted'
+    cutted_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
+    assert cutted_audio.url
+    assert cutted_audio.uuid
+    assert cutted_audio.name
+    assert cutted_audio.size
+    assert cutted_audio.sample_url
+    assert cutted_audio.duration
+    assert cutted_audio.sample_duration
 
-    S3MediaServerApi::Media::Audio.destroy(uuid)
-    sleep(5)
-    resolve_response = S3MediaServerApi::Media::Audio.resolve(uuid)
-    assert_equal "unprocessable_entity", resolve_response.status, 'Audio wasnt destroyed'
+    S3MediaServerApi::Media::Audio.destroy(created_audio.uuid)
   end
 end

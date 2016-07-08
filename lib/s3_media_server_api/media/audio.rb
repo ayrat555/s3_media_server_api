@@ -3,7 +3,34 @@ module S3MediaServerApi
     class Audio < CommonMediaApi
       AUDIO = 'audio'
 
+      def sample_url
+        @params[:sample_url]
+      end
+
+      def url
+        @params[:url]
+      end
+
+      def sample_url
+        @params[:sample_url]
+      end
+
+      def duration
+        @params[:duration]
+      end
+
+      def sample_duration
+        @params[:sample_duration]
+      end
+
       class << self
+        def create(path)
+          Audio.new(super(path))
+        end
+
+        def resolve(uuid)
+          Audio.new(super(uuid))
+        end
         #
         # sends request to cut audio file
         # parameters: uuid - uuid of file
