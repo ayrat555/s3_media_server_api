@@ -56,18 +56,6 @@ class S3MediaServerApiTest < Minitest::Test
     S3MediaServerApi::Media::Image.destroy(copied_image.uuid)
   end
 
-  def test_video_api
-    response = S3MediaServerApi::Media::Video.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
-    uuid = response[:data][:uuid]
-    assert response.success?
-    resolve_response = S3MediaServerApi::Media::Video.resolve(uuid)
-    assert resolve_response.success?, 'Can not resolve video'
-    S3MediaServerApi::Media::Video.destroy(uuid)
-    sleep(5)
-    resolve_response = S3MediaServerApi::Media::Video.resolve(uuid)
-    assert resolve_response.fail?
-  end
-
   def test_document_api
     created_document = S3MediaServerApi::Media::Document.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
 
