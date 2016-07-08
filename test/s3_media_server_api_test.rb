@@ -69,15 +69,15 @@ class S3MediaServerApiTest < Minitest::Test
   end
 
   def test_document_api
-    response = S3MediaServerApi::Media::Document.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
-    uuid = response[:data][:uuid]
-    assert response.success?
-    resolve_response = S3MediaServerApi::Media::Document.resolve(uuid)
-    assert resolve_response.success?, 'Can not resolve document'
-    S3MediaServerApi::Media::Document.destroy(uuid)
-    sleep(5)
-    resolve_response = S3MediaServerApi::Media::Document.resolve(uuid)
-    assert_equal "unprocessable_entity", resolve_response.status, 'Document wasnt destroyed'
+    created_document = S3MediaServerApi::Media::Document.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
+
+    resolved_document = S3MediaServerApi::Media::Document.resolve(created_document.uuid)
+    assert resolved_document.uuid
+    assert resolved_document.url
+    assert resolved_document.size
+    assert resolved_document.name
+
+    S3MediaServerApi::Media::Document.destroy(created_document.uuid)
   end
 
   def test_audio_api
