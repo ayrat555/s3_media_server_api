@@ -4,7 +4,7 @@ class S3MediaServerApiTest < Minitest::Test
   def test_that_it_has_a_version_number
     refute_nil ::S3MediaServerApi::VERSION
   end
-  
+
   def test_aws_file_response
     aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
     assert aws_file.uuid, 'uuid wasnt set'
@@ -76,7 +76,11 @@ class S3MediaServerApiTest < Minitest::Test
     assert resolved_audio.name
     assert resolved_audio.size
 
-    S3MediaServerApi::Media::Audio.cut(created_audio.uuid, created_audio.url, 20, 40)
+    cut_params = { audio_url: created_audio.url,
+                   duration: 20,
+                   start_position: 40}
+
+    S3MediaServerApi::Media::Audio.cut(created_audio.uuid, cut_params)
     sleep(10)
     cutted_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
     assert cutted_audio.url
