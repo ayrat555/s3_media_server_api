@@ -22,10 +22,27 @@ Or install it yourself as:
 ## Usage
 ### Available resources
 
-#### S3MediaServerApi::Uploader
+#### AwsFile
 ```ruby
-#TODO : add example
+# to create aws file from its path, use upload method from S3MediaServerApi::Uploader module
+aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+
+# to resolve aws file, use resolve method
+resolved_aws_file =  S3MediaServerApi::AwsFile.resolve(aws_file.uuid)
+
+# both S3MediaServerApi::Uploader.upload and S3MediaServerApi::AwsFile.resolve return aws file object
+aws_file.uuid
+aws_file.size
+aws_file.mime_type
+aws_file.uploads_count
+aws_file.default_part_size
+aws_file.state
+aws_file.public_url
+aws_file.name
+
 ```
+NOTE: you can't remove aws file without creation media resource
+
 #### S3MediaServerApi::Media::Document
 Use S3MediaServerApi::Media::Document to interact Document resource
 ```ruby
