@@ -22,27 +22,6 @@ Or install it yourself as:
 ## Usage
 ### Available resources
 
-#### AwsFile
-```ruby
-# to create aws file from its path, use upload method from S3MediaServerApi::Uploader module
-aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
-
-# to resolve aws file, use resolve method
-resolved_aws_file =  S3MediaServerApi::AwsFile.resolve(aws_file.uuid)
-
-# both S3MediaServerApi::Uploader.upload and S3MediaServerApi::AwsFile.resolve return aws file object
-aws_file.uuid
-aws_file.size
-aws_file.mime_type
-aws_file.uploads_count
-aws_file.default_part_size
-aws_file.state
-aws_file.public_url
-aws_file.name
-
-```
-NOTE: you can't remove aws file without creation media resource
-
 #### S3MediaServerApi::Media::Document
 Use S3MediaServerApi::Media::Document to interact Document resource
 ```ruby
@@ -95,6 +74,7 @@ thumbed_image.thumb.height
 copied_image = S3MediaServerApi::Media::Image.copy(created_image.uuid)
 
 # to destroy image, use destroy method
+# this method is asynchronous
 S3MediaServerApi::Media::Image.destroy(created_image.uuid)
 ```
 #### S3MediaServerApi::Media::Audio
@@ -116,7 +96,11 @@ resolved_audio.size
 #             audio_url - url of audio file
 #             duration  - duration of cutted file
 #             start_position - position where cut wil be made
-S3MediaServerApi::Media::Audio.cut(created_audio.uuid, created_audio.url, 20, 40)
+# this method is asynchronous
+cut_params = { audio_url: created_audio.url,
+               duration: 20,
+               start_position: 40}
+S3MediaServerApi::Media::Audio.cut(created_audio.uuid, cut_params)
 
 # after audio is cutted, new attributes will be available
 cutted_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
@@ -126,6 +110,7 @@ cutted_audio.duration
 cutted_audio.sample_duration
 
 # destroys audio file
+# this method is asynchronous
 S3MediaServerApi::Media::Audio.destroy(created_audio.uuid)
 ```
 #### S3MediaServerApi::Media::Video
@@ -161,8 +146,31 @@ video.versions[0].resolution
 video.versions[0].url
 video.versions[0].size
 
+# to destroy video, use destroy method
+# this method is asynchronous
+S3MediaServerApi::Media::Video.destroy(video.uuid)
+```
+
+#### AwsFile
+```ruby
+# to create aws file from its path, use upload method from S3MediaServerApi::Uploader module
+aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+
+# to resolve aws file, use resolve method
+resolved_aws_file =  S3MediaServerApi::AwsFile.resolve(aws_file.uuid)
+
+# both S3MediaServerApi::Uploader.upload and S3MediaServerApi::AwsFile.resolve return aws file object
+aws_file.uuid
+aws_file.size
+aws_file.mime_type
+aws_file.uploads_count
+aws_file.default_part_size
+aws_file.state
+aws_file.public_url
+aws_file.name
 
 ```
+NOTE: you can't remove aws file without creating media resource
 
 ## Development
 
