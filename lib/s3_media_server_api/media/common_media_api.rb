@@ -41,7 +41,7 @@ module S3MediaServerApi
           uuid = aws_file.uuid
           params = (media_type == 'video') ? { uuid: uuid } : { aws_file_uuid: uuid }
           response = AsynkRequest.sync_request(base_path, :create, params)
-          raise CreationError.new(response[:body]) unless response.success?
+          raise CreationError.message_from_asynk_response(response) unless response.success?
           response
         end
         #

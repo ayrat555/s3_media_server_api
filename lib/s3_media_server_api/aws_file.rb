@@ -58,7 +58,7 @@ module S3MediaServerApi
                    name: File.basename(file_path)
                  }
         response = AsynkRequest.sync_request(base_path, :create, params)
-        raise FileCreationError.new(response[:body]) unless response.success?
+        raise FileCreationError.message_from_asynk_response(response) unless response.success?
         AwsFile.new(response)
       end
       #
@@ -87,7 +87,7 @@ module S3MediaServerApi
       #
       def complete_upload(uuid)
         response = AsynkRequest.sync_request(base_path, :complete_upload, uuid: uuid)
-        raise CompleteUploadError.new(response[:body]) unless response.success?
+        raise CompleteUploadError.message_from_asynk_response(response) unless response.success?
         AwsFile.new(response)
       end
 
