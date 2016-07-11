@@ -67,7 +67,7 @@ module S3MediaServerApi
       #
       # returns: response with file information
       #
-      def reolve(uuid)
+      def resolve(uuid)
         AsynkRequest.sync_request(base_path, :resolve, uuid: uuid)
       end
       #
