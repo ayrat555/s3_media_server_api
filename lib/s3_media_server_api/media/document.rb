@@ -4,7 +4,7 @@ module S3MediaServerApi
       DOCUMENT = 'document'
 
       def url
-        @params[:url]
+        @params[:url if exist?
       end
 
       class << self

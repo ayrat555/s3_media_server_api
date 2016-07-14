@@ -14,19 +14,23 @@ module S3MediaServerApi
       end
 
       def uuid
-        @params[:uuid]
+        @params[:uuid] if exist?
       end
 
       def name
-        @params[:name]
+        @params[:name] if exist?
       end
 
       def size
-        @params[:size]
+        @params[:size] if exist?
       end
 
       def as_hash
         @params
+      end
+
+      def exist?
+        !@params.nil?
       end
 
       class << self

@@ -27,11 +27,11 @@ module S3MediaServerApi
       end
 
       def source
-        ImageObject.new(@params[:source])
+        ImageObject.new(@params[:source]) if exist?
       end
 
       def thumb
-        ImageObject.new(@params[:thumb])
+        ImageObject.new(@params[:thumb]) if exist?
       end
 
       class << self
