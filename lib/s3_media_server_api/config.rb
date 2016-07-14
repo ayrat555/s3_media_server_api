@@ -2,25 +2,39 @@ require 'yaml'
 
 module S3MediaServerApi
   class ConfigError < S3MediaServerApiError; end
-  #
-  # By default 4 threads is used for file uploading. To change
-  # this value you can create config/s3_media_server_api.yml and specify
-  # upload_thread_count
-  #
-  # Example
-  #   prosuction:
-  #     upload_thread_count: 10
-  #
   class Config
-    attr_reader :upload_thread_count
+    class << self
+      def add_config(name, default_value = nil)
 
-    def initialize
-      @upload_thread_count = nil
-      environment = ENV['RUBY_ENV'] || ENV['RAILS_ENV']
-      if File.exists?('config/s3_media_server_api.yml')
-        @attributes = YAML.load_file('config/s3_media_server_api.yml')[environment][:upload_thread_count]
+        define_singleton_method "#{name}=".to_sym do |value|
+          instance_variable_set("@#{name}".to_sym,value)
+        end
+
+        define_singleton_method "#{name}".to_sym do
+          value = instance_variable_get(:"@#{name}")
+          raise ConfigError.new("Key: '#{name}' cannot be nil.")  if @required_keys.include?(name.to_sym) && value.nil?
+          value
+        end
+
+        self.send("#{name}=".to_sym, default_value)
       end
-      @upload_thread_count ||= 4
+
+      def required(*args)
+        @required_keys = args
+      end
+
+      def configure
+        yield self
+        @required_keys.each do |key|
+          raise ConfigError.new("Key: #{key} cannot be nil.") if instance_variable_get(:"@#{key}").nil?
+        end
+      end
     end
+
+    add_config :mocked
+    add_config :cache_class, S3MediaServerApi::Cache
+    add_config :upload_thread_count, 4
+
+    required :mocked, :cache_class, :upload_thread_count
   end
 end

@@ -34,7 +34,7 @@ class S3MediaServerApiTest < Minitest::Test
 
 
     S3MediaServerApi::Media::Image.resize(created_image.uuid)
-    sleep(10)
+    sleep(20)
     thumbed_image = S3MediaServerApi::Media::Image.resolve(created_image.uuid)
     assert thumbed_image.thumb.url
     assert thumbed_image.thumb.width
@@ -81,7 +81,7 @@ class S3MediaServerApiTest < Minitest::Test
                    start_position: 40}
 
     S3MediaServerApi::Media::Audio.cut(created_audio.uuid, cut_params)
-    sleep(10)
+    sleep(20)
     cutted_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
     assert cutted_audio.url
     assert cutted_audio.uuid

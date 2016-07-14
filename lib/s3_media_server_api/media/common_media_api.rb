@@ -58,7 +58,10 @@ module S3MediaServerApi
         # returns: response with file information
         #
         def resolve(uuid)
-          AsynkRequest.sync_request(base_path, :resolve, uuid: uuid)
+          cache_key = "#{media_type}/#{uuid}"
+          Config.cache_class.fetch(cache_key) do
+            AsynkRequest.sync_request(base_path, :resolve, uuid: uuid)
+          end
         end
         #
         # this method should be used to send custom synchronous request to

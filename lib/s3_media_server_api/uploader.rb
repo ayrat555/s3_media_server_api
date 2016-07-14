@@ -29,7 +29,7 @@ module S3MediaServerApi
         aws_file_uuid = file.uuid
         uploads_count = file.uploads_count
         parts = compute_parts(file_path, default_part_size)
-        Parallel.each(parts, in_threads: S3MediaServerApi.upload_thread_count) do |part|
+        Parallel.each(parts, in_threads: S3MediaServerApi::Config.upload_thread_count) do |part|
           signed_upload_url = AwsFile.get_signed_upload_url(aws_file_uuid, part[:part_number])
 
           raise PartUploadError.new("Part #{part[:part_number]} wasn't uploaded") unless upload_part(signed_upload_url, part[:body].read)
