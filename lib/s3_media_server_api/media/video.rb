@@ -26,31 +26,31 @@ module S3MediaServerApi
       end
 
       def preview
-        @params[:preview] if exist?
+        @params[:preview]
       end
 
       def duration
-        @params[:duration] if exist?
+        @params[:duration]
       end
 
       def transcoded
-        @params[:transcoded] if exist?
+        @params[:transcoded]
       end
 
       def embed_url
-        @params[:embed_url] if exist?
+        @params[:embed_url]
       end
 
       def provider
-        @params[:provider] if exist?
+        @params[:provider]
       end
 
       def screenshots
-        @params[:screenshots].map { |screenshot| Image::ImageObject.new(screenshot) } if exist?
+        @params[:screenshots].map { |screenshot| Image::ImageObject.new(screenshot) } if @params[:screenshots]
       end
 
       def versions
-        @params[:versions].map { |version| Version.new(version) } if exist?
+        @params[:versions].map { |version| Version.new(version) } if @params[:versions]
       end
 
       class << self

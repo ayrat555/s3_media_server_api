@@ -6,7 +6,7 @@ module S3MediaServerApi
       class ImageObject
 
         def initialize(params)
-          @params = params
+          @params = params.nil? ? {} : params
         end
 
         def url
@@ -27,11 +27,11 @@ module S3MediaServerApi
       end
 
       def source
-        ImageObject.new(@params[:source]) if exist?
+        ImageObject.new(@params[:source])
       end
 
       def thumb
-        ImageObject.new(@params[:thumb]) if exist?
+        ImageObject.new(@params[:thumb])
       end
 
       class << self

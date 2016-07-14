@@ -10,19 +10,19 @@ module S3MediaServerApi
     class CommonMediaApi
 
       def initialize(response)
-        @params = response[:data]
+        @params = response[:data].nil? ? {} : response[:data]
       end
 
       def uuid
-        @params[:uuid] if exist?
+        @params[:uuid]
       end
 
       def name
-        @params[:name] if exist?
+        @params[:name]
       end
 
       def size
-        @params[:size] if exist?
+        @params[:size]
       end
 
       def as_hash
@@ -30,7 +30,7 @@ module S3MediaServerApi
       end
 
       def exist?
-        !@params.nil?
+        @params.empty?
       end
 
       class << self
