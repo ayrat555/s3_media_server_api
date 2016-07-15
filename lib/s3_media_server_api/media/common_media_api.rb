@@ -30,7 +30,7 @@ module S3MediaServerApi
       end
 
       def exist?
-        @params.empty?
+        !@params.empty?
       end
 
       class << self
