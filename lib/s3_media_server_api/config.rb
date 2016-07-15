@@ -31,10 +31,9 @@ module S3MediaServerApi
       end
     end
 
-    add_config :mocked
     add_config :cache_class, S3MediaServerApi::Cache
     add_config :upload_thread_count, 4
 
-    required :mocked, :cache_class, :upload_thread_count
+    required :cache_class, :upload_thread_count
   end
 end

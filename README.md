@@ -172,6 +172,56 @@ aws_file.name
 ```
 NOTE: you can't remove aws file without creating media resource
 
+## Configuration
+
+You can configure the following values by overriding these values using S3MediaServerApi::Config.configure method.
+
+```ruby
+# in how many threads file will be uploaded
+# by default upload_thread_count value is 4
+upload_thread_count
+# class that will cache queries to S3 Media Server
+cache_class
+```
+
+Example
+```ruby
+
+S3MediaServerApi::Config.configure do |config|
+  config.upload_thread_count = 10
+end
+```
+
+#### Configuring cache class
+
+Define class with class method fetch
+```ruby
+
+class Infrastructure::S3MediaServerCacheService
+
+  class << self
+    def fetch(key, params={}, &block)
+      Rails.cache.fetch(key, expires_in: 24.hours) do
+        yield
+      end
+    end
+  end
+end
+
+```
+Then override cache_class in S3MediaServerApi::Config.configure
+```ruby
+
+S3MediaServerApi::Config.configure do |config|
+  config.cache_class = Infrastructure::S3MediaServerCacheService
+end
+```
+
+
+
+
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
