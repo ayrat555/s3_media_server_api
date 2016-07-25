@@ -91,6 +91,10 @@ module S3MediaServerApi
         AwsFile.new(response)
       end
 
+      def file_exists(uuid)
+        AsynkRequest.async_request(base_path, :file_exists, uuid: uuid)
+      end
+
       private
 
         def file_mime_type(file_source_path)

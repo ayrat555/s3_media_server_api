@@ -8,7 +8,7 @@ module S3MediaServerApi
 
           S3MediaServerApi::SimpleUploadersRepository.uploader_classes.each do |uploader_class|
             uploader = uploader_class.find_uploader_by_uuid(aws_file_uuid)
-            AsynkRequest.async_request('aws_file', :file_exists, uuid: aws_file_uuid) and return if uploader.present?
+            S3MediaServerApi::AwsFile.file_exists(aws_file_uuid) and return if uploader.present?
           end
         end
 
