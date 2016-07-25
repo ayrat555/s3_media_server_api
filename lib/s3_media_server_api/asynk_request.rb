@@ -8,7 +8,8 @@ module S3MediaServerApi
       #             params - parametes that will be passed to consumer
       #
       def async_request(path, action, params)
-        Asynk::Publisher.publish("#{server}.#{path}.#{action}", params)
+        consumer = "#{server}.#{path}.#{action}"
+        S3MediaServerApi::Config.mocked ? Mocked::Request.publish(consumer, params) : Asynk::Publisher.publish(consumer, params)
       end
       #
       # sends synchronous request using Asynk gem - https://github.com/konalegi/asynk
@@ -17,7 +18,8 @@ module S3MediaServerApi
       #             params - parametes that will be passed to consumer
       #
       def sync_request(path, action, params)
-        Asynk::Publisher.sync_publish("#{server}.#{path}.#{action}", params)
+        consumer = "#{server}.#{path}.#{action}"
+        S3MediaServerApi::Config.mocked ? Mocked::Request.sync_publish(consumer, params) : Asynk::Publisher.sync_publish(consumer, params)
       end
 
       private

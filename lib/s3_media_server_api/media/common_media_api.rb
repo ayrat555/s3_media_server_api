@@ -41,7 +41,7 @@ module S3MediaServerApi
         # returns: response with created AwsFile information
         #
         def create(path)
-          aws_file = Uploader.upload(path)
+          aws_file = S3MediaServerApi::Config.mocked ? Mocked::Uploader.upload(path) : Uploader.upload(path)
           uuid = aws_file.uuid
           params = (media_type == 'video') ? { uuid: uuid } : { aws_file_uuid: uuid }
           response = AsynkRequest.sync_request(base_path, :create, params)
