@@ -55,7 +55,7 @@ module S3MediaServerApi
 
       class << self
         def create(uuid)
-          Video.new(super(path))
+          Video.new(super(uuid))
         end
 
         def create_from_path(path)

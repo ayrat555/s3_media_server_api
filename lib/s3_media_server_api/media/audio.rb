@@ -21,7 +21,7 @@ module S3MediaServerApi
 
       class << self
         def create(uuid)
-          Audio.new(super(path))
+          Audio.new(super(uuid))
         end
 
         def create_from_path(path)

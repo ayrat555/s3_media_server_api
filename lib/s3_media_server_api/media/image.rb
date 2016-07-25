@@ -36,7 +36,7 @@ module S3MediaServerApi
 
       class << self
         def create(uuid)
-          Image.new(super(path))
+          Image.new(super(uuid))
         end
 
         def create_from_path(path)

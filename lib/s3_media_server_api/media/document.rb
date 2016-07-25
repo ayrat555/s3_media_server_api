@@ -9,7 +9,7 @@ module S3MediaServerApi
 
       class << self
         def create(uuid)
-          Document.new(super(path))
+          Document.new(super(uuid))
         end
 
         def create_from_path(path)
