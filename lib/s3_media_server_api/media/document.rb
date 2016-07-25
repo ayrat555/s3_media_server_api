@@ -8,8 +8,11 @@ module S3MediaServerApi
       end
 
       class << self
+        def create(uuid)
+          Document.new(super(path))
+        end
 
-        def create(path)
+        def create_from_path(path)
           Document.new(super(path))
         end
 

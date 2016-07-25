@@ -34,19 +34,22 @@ module S3MediaServerApi
       end
 
       class << self
+        def create(uuid)
+          params = (media_type == 'video') ? { uuid: uuid } : { aws_file_uuid: uuid }
+          response = AsynkRequest.sync_request(base_path, :create, params)
+          raise CreationError.message_from_asynk_response(response) unless response.success?
+          response
+        end
         #
         # creates media file
         # parameters: path - file path in file system
         #
         # returns: response with created AwsFile information
         #
-        def create(path)
+        def create_from_path(path)
           aws_file = S3MediaServerApi::Config.mocked ? Mocked::Uploader.upload(path) : Uploader.upload(path)
           uuid = aws_file.uuid
-          params = (media_type == 'video') ? { uuid: uuid } : { aws_file_uuid: uuid }
-          response = AsynkRequest.sync_request(base_path, :create, params)
-          raise CreationError.message_from_asynk_response(response) unless response.success?
-          response
+          create(uuid)
         end
         #
         # destroys media file

@@ -20,7 +20,11 @@ module S3MediaServerApi
       end
 
       class << self
-        def create(path)
+        def create(uuid)
+          Audio.new(super(path))
+        end
+
+        def create_from_path(path)
           Audio.new(super(path))
         end
 

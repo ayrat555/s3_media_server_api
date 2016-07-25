@@ -8,7 +8,7 @@ class MockedRequestTest < Minitest::Test
   end
 
   def test_audio_consumers
-     audio = S3MediaServerApi::Media::Audio.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+     audio = S3MediaServerApi::Media::Audio.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
      assert audio.uuid
      audio = S3MediaServerApi::Media::Audio.resolve('555')
      assert audio.sample_url
@@ -19,7 +19,7 @@ class MockedRequestTest < Minitest::Test
   end
 
   def test_video_consumers
-     video = S3MediaServerApi::Media::Video.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+     video = S3MediaServerApi::Media::Video.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
      assert video.versions[0].url
      assert video.uuid
      video = S3MediaServerApi::Media::Video.resolve(555)
@@ -27,7 +27,7 @@ class MockedRequestTest < Minitest::Test
   end
 
   def test_image_consumers
-     image = S3MediaServerApi::Media::Image.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+     image = S3MediaServerApi::Media::Image.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
      assert image.source
      image = S3MediaServerApi::Media::Image.resolve(555)
      assert image.uuid
@@ -37,7 +37,7 @@ class MockedRequestTest < Minitest::Test
   end
 
   def test_document_consumers
-     document = S3MediaServerApi::Media::Document.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+     document = S3MediaServerApi::Media::Document.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
      assert document.size
      document = S3MediaServerApi::Media::Document.resolve(555)
      assert document.name

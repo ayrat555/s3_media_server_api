@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class S3MediaServerApiTest < Minitest::Test
+
+  def setup
+    S3MediaServerApi::Config.configure do |config|
+      config.mocked = false
+    end
+  end
+
   def test_that_it_has_a_version_number
     refute_nil ::S3MediaServerApi::VERSION
   end
@@ -18,7 +25,7 @@ class S3MediaServerApiTest < Minitest::Test
   end
 
   def test_image_api
-    created_image = S3MediaServerApi::Media::Image.create('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+    created_image = S3MediaServerApi::Media::Image.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
     assert created_image.uuid
     assert created_image.size
     assert created_image.name
@@ -57,7 +64,7 @@ class S3MediaServerApiTest < Minitest::Test
   end
 
   def test_document_api
-    created_document = S3MediaServerApi::Media::Document.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
+    created_document = S3MediaServerApi::Media::Document.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
 
     resolved_document = S3MediaServerApi::Media::Document.resolve(created_document.uuid)
     assert resolved_document.uuid
@@ -69,7 +76,7 @@ class S3MediaServerApiTest < Minitest::Test
   end
 
   def test_audio_api
-    created_audio = S3MediaServerApi::Media::Audio.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+    created_audio = S3MediaServerApi::Media::Audio.create_from_path ('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
     resolved_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
     assert resolved_audio.url
     assert resolved_audio.uuid

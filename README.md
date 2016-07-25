@@ -23,10 +23,13 @@ Or install it yourself as:
 ### Available resources
 
 #### S3MediaServerApi::Media::Document
-Use S3MediaServerApi::Media::Document to interact Document resource
+Use S3MediaServerApi::Media::Document to interact with Document resource
 ```ruby
+# to create document from existing aws file uuid, use create method
+document = S3MediaServerApi::Media::Document.create("4edbfdf9-9517-4902-8e92-2212215b0de5")
+
 # if you want create document from file path, use create method
-created_document = S3MediaServerApi::Media::Document.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
+created_document = S3MediaServerApi::Media::Document.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
 
 
 # to resolve document, use resolve method
@@ -44,10 +47,13 @@ resolved_document.name  # url of document
 S3MediaServerApi::Media::Document.destroy(created_document.uuid)
 ```
 #### S3MediaServerApi::Media::Image
-Use S3MediaServerApi::Media::Image to interact Image resource
+Use S3MediaServerApi::Media::Image to interact with  Image resource
 ```ruby
+# to create image from existing aws file uuid, use create method
+image = S3MediaServerApi::Media::Image.create("4edbfdf9-9517-4902-8e92-2212215b0de5")
+
 # if you want create image from file path, use create method
-created_image = S3MediaServerApi::Media::Image.create('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+created_image = S3MediaServerApi::Media::Image.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
 
 # to resolve image, use resolve method
 resolved_image = S3MediaServerApi::Media::Image.resolve(created_image.uuid)
@@ -78,10 +84,13 @@ copied_image = S3MediaServerApi::Media::Image.copy(created_image.uuid)
 S3MediaServerApi::Media::Image.destroy(created_image.uuid)
 ```
 #### S3MediaServerApi::Media::Audio
-Use S3MediaServerApi::Media::Audio to interact Audio resource
+Use S3MediaServerApi::Media::Audio to interact with Audio resource
 ```ruby
+# to create audio from existing aws file uuid, use create method
+audio = S3MediaServerApi::Media::Audio.create("4edbfdf9-9517-4902-8e92-2212215b0de5")
+
 # to create audio file from its path, use create method
-created_audio = S3MediaServerApi::Media::Audio.create('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+created_audio = S3MediaServerApi::Media::Audio.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
 # to resolve image, use resolve method
 resolved_audio = S3MediaServerApi::Media::Audio.resolve(created_audio.uuid)
 
@@ -114,10 +123,13 @@ cutted_audio.sample_duration
 S3MediaServerApi::Media::Audio.destroy(created_audio.uuid)
 ```
 #### S3MediaServerApi::Media::Video
-Use S3MediaServerApi::Media::Video to interact Video resource
+Use S3MediaServerApi::Media::Video to interact with Video resource
 ```ruby
+# to create video from existing aws file uuid, use create method
+video = S3MediaServerApi::Media::Video.create("4edbfdf9-9517-4902-8e92-2212215b0de5")
+
 # to create video from its path, use create method
-video = S3MediaServerApi::Media::Video.create('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
+video = S3MediaServerApi::Media::Video.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/sample_mpeg4.mp4')
 
 # to resolve video, use resolve method
 video = S3MediaServerApi::Media::Video.resolve(video.uuid)
