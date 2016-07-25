@@ -1,0 +1,81 @@
+PATH
+  remote: .
+  specs:
+    s3_media_server_api (0.1.0.3)
+      asynk (>= 0.0.1)
+      faraday
+      mimemagic
+      parallel
+      simple_file_uploader
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (5.0.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (~> 0.7)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    amq-protocol (2.0.1)
+    asynk (0.0.2)
+      activesupport (>= 4.2)
+      bunny (~> 2.3)
+      celluloid (~> 0.17)
+      celluloid-io (~> 0.17)
+      connection_pool (~> 2.2)
+      json (~> 1.0)
+    bunny (2.5.0)
+      amq-protocol (>= 2.0.1)
+    celluloid (0.17.3)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-io (0.17.3)
+      celluloid (>= 0.17.2)
+      nio4r (>= 1.1)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.6)
+      timers (>= 4.1.1)
+    concurrent-ruby (1.0.2)
+    connection_pool (2.2.0)
+    faraday (0.9.2)
+      multipart-post (>= 1.2, < 3)
+    hitimes (1.2.4)
+    i18n (0.7.0)
+    json (1.8.3)
+    mimemagic (0.3.1)
+    minitest (5.9.0)
+    multipart-post (2.0.0)
+    nio4r (1.2.1)
+    parallel (1.9.0)
+    rake (10.5.0)
+    simple_file_uploader (0.0.1)
+      bunny
+    thread_safe (0.3.5)
+    timers (4.1.1)
+      hitimes
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.11)
+  minitest (~> 5.0)
+  rake (~> 10.0)
+  s3_media_server_api!
+
+BUNDLED WITH
+   1.11.2
