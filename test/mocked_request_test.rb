@@ -6,14 +6,13 @@ class MockedRequestTest < Minitest::Test
       config.mocked = true
     end
   end
-  
+
   def test_audio_consumers
      audio = S3MediaServerApi::Media::Audio.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
      assert audio.uuid
      audio = S3MediaServerApi::Media::Audio.resolve('555')
      assert audio.sample_url
-     cut_params = { audio_url: "asdfasdfa",
-                    duration: 20,
+     cut_params = { duration: 20,
                     start_position: 40}
      assert S3MediaServerApi::Media::Audio.cut(555, cut_params)
   end

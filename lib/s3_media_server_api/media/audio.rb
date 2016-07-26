@@ -23,14 +23,12 @@ module S3MediaServerApi
         #
         # sends request to cut audio file
         # parameters: uuid - uuid of file
-        #             audio_url - url of audio file
         #             duration  - duration of audio file
         #             start_position - position where cut wil be made
         #
-        def cut(uuid, audio_url:, duration:, start_position:)
+        def cut(uuid, duration:, start_position:)
           params = {
                      uuid: uuid,
-                     audio_url: audio_url,
                      duration: duration,
                      start_position: start_position
                     }

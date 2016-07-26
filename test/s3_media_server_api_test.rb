@@ -83,8 +83,7 @@ class S3MediaServerApiTest < Minitest::Test
     assert resolved_audio.name
     assert resolved_audio.size
 
-    cut_params = { audio_url: created_audio.url,
-                   duration: 20,
+    cut_params = { duration: 20,
                    start_position: 40}
 
     S3MediaServerApi::Media::Audio.cut(created_audio.uuid, cut_params)
