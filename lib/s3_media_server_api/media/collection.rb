@@ -25,10 +25,6 @@ module S3MediaServerApi
 
       class << self
 
-        def add_item()
-
-        end
-
         private
 
           def media_type; COLLECTION; end

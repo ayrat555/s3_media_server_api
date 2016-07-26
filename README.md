@@ -163,6 +163,33 @@ video.versions[0].size
 S3MediaServerApi::Media::Video.destroy(video.uuid)
 ```
 
+#### S3MediaServerApi::Media::Collection
+Use S3MediaServerApi::Media::Collection to interact with Collection resource
+```ruby
+# to create Collection, use create method
+# provide uuid of collection owner
+owner_uuid = "4edbfdf9-9517-4902-8e92-2212215b0de5"
+collection = S3MediaServerApi::Media::Collection.create(owner_uuid)
+
+
+# to resolve document, use resolve method
+resolved_collection = S3MediaServerApi::Media::Collection.resolve(created_collection.uuid)
+
+# both methods create and resolve return collection object
+
+resolved_collection.uuid # uuid of the collection
+resolved_collection.owner_uuid  # uuid of the collection owner
+resolved_collection.videos # array of videos
+resolved_collection.documents  # array of documents
+resolved_collection.images  # array of images
+resolved_collection.audios  # array of audio files
+# NOTE: video, document, image and audio objects are described above
+
+# use destroy method, to destroy collection
+# this method is asynchronous, so it doesn't return anything
+S3MediaServerApi::Media::Colllection.destroy(created_collection.uuid)
+```
+
 #### AwsFile
 ```ruby
 # to create aws file from its path, use upload method from S3MediaServerApi::Uploader module
