@@ -44,7 +44,7 @@ module S3MediaServerApi
           else
             params = { aws_file_uuid: uuid }
           end
-          return empty_object if params.empty?
+          return empty_object unless uuid
 
           response = AsynkRequest.sync_request(base_path, :create, params)
           raise CreationError.message_from_asynk_response(response) unless response.success?
