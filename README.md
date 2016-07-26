@@ -106,8 +106,7 @@ resolved_audio.size
 #             duration  - duration of cutted file
 #             start_position - position where cut wil be made
 # this method is asynchronous
-cut_params = { audio_url: created_audio.url,
-               duration: 20,
+cut_params = { duration: 20,
                start_position: 40}
 S3MediaServerApi::Media::Audio.cut(created_audio.uuid, cut_params)
 
@@ -221,6 +220,8 @@ You can configure the following values by overriding these values using S3MediaS
 upload_thread_count
 # class that will cache queries to S3 Media Server
 cache_class
+# to mock all request set mock to true
+mock
 ```
 
 Example
@@ -228,6 +229,7 @@ Example
 
 S3MediaServerApi::Config.configure do |config|
   config.upload_thread_count = 10
+  config.mock = true
 end
 ```
 
@@ -255,9 +257,6 @@ S3MediaServerApi::Config.configure do |config|
   config.cache_class = Infrastructure::S3MediaServerCacheService
 end
 ```
-
-
-
 
 
 
