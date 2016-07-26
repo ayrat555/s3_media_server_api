@@ -20,17 +20,6 @@ module S3MediaServerApi
       end
 
       class << self
-        def create(uuid)
-          Audio.new(super(uuid))
-        end
-
-        def create_from_path(path)
-          Audio.new(super(path))
-        end
-
-        def resolve(uuid)
-          Audio.new(super(uuid))
-        end
         #
         # sends request to cut audio file
         # parameters: uuid - uuid of file

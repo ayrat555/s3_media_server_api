@@ -3,6 +3,7 @@ require 's3_media_server_api/media/image'
 require 's3_media_server_api/media/video'
 require 's3_media_server_api/media/audio'
 require 's3_media_server_api/media/document'
+require 's3_media_server_api/media/collection'
 
 
 module S3MediaServerApi

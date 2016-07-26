@@ -6,7 +6,7 @@ class MockedRequestTest < Minitest::Test
       config.mocked = true
     end
   end
-
+  
   def test_audio_consumers
      audio = S3MediaServerApi::Media::Audio.create_from_path('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
      assert audio.uuid
@@ -43,5 +43,19 @@ class MockedRequestTest < Minitest::Test
      assert document.name
      assert document.uuid
      assert S3MediaServerApi::Media::Document.destroy(555)
+  end
+
+  def test_collection_consumers
+     collection = S3MediaServerApi::Media::Collection.resolve('/Users/ayrat/Development/s3_media_server_api/tmp/music_test.mp3')
+     assert collection.videos
+     assert collection.documents
+     assert collection.audios
+     assert collection.images
+     assert collection.videos[0].versions[0]
+  end
+
+  def test_resolve_and_create_with_nil_param
+     assert audio = S3MediaServerApi::Media::Audio.resolve(nil)
+     refute audio.exist?
   end
 end

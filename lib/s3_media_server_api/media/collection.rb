@@ -1,22 +1,22 @@
 module S3MediaServerApi
   module Media
-    class COLLECTION < CommonMediaApi
+    class Collection < CommonMediaApi
       COLLECTION = 'collection'
 
       def videos
-        @params[:videos].map { |video| Video.new(video) } if @params[:videos]
+        @params[:videos].map { |video| Video.new(data: video) } if @params[:videos]
       end
 
       def images
-        @params[:images].map { |image| Image::ImageObject.new(image) } if @params[:images]
+        @params[:images].map { |image| Image::ImageObject.new(data: image) } if @params[:images]
       end
 
       def documents
-        @params[:documents].map { |documents| Video.new(document) } if @params[:documents]
+        @params[:documents].map { |document| Video.new(data: document) } if @params[:documents]
       end
 
       def audios
-        @params[:audios].map { |audios| Audio.new(audio) } if @params[:audios]
+        @params[:audios].map { |audio| Audio.new(data: audio) } if @params[:audios]
       end
 
       def owner_uuid
@@ -25,8 +25,8 @@ module S3MediaServerApi
 
       class << self
 
-        def resolve(uuid)
-          Collection.new(super(uuid))
+        def add_item()
+
         end
 
         private

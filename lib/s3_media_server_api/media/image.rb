@@ -35,17 +35,6 @@ module S3MediaServerApi
       end
 
       class << self
-        def create(uuid)
-          Image.new(super(uuid))
-        end
-
-        def create_from_path(path)
-          Image.new(super(path))
-        end
-
-        def resolve(uuid)
-          Image.new(super(uuid))
-        end
         #
         # copies image file
         # parameters: uuid - uuid of file

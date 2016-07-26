@@ -54,17 +54,6 @@ module S3MediaServerApi
       end
 
       class << self
-        def create(uuid)
-          Video.new(super(uuid))
-        end
-
-        def create_from_path(path)
-          Video.new(super(path))
-        end
-
-        def resolve(uuid)
-          Video.new(super(uuid))
-        end
 
         private
 

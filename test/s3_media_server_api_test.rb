@@ -100,4 +100,13 @@ class S3MediaServerApiTest < Minitest::Test
 
     S3MediaServerApi::Media::Audio.destroy(created_audio.uuid)
   end
+
+  def test_collection_api
+    owner_uuid = 'sdfasdf'
+    collection = S3MediaServerApi::Media::Collection.create(owner_uuid)
+    assert collection
+    assert collection.owner_uuid, owner_uuid
+    assert collection.uuid
+    assert S3MediaServerApi::Media::Collection.destroy(collection.uuid)
+  end
 end

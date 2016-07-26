@@ -8,17 +8,6 @@ module S3MediaServerApi
       end
 
       class << self
-        def create(uuid)
-          Document.new(super(uuid))
-        end
-
-        def create_from_path(path)
-          Document.new(super(path))
-        end
-
-        def resolve(uuid)
-          Document.new(super(uuid))
-        end
 
         private
 

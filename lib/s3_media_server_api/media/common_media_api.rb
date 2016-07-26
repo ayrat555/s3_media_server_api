@@ -35,10 +35,20 @@ module S3MediaServerApi
 
       class << self
         def create(uuid)
-          params = (media_type == 'video') ? { uuid: uuid } : { aws_file_uuid: uuid }
+          params = {}
+          case media_type
+          when 'video'
+            params = {uuid: uuid}
+          when 'collection'
+            params = {owner_uuid: uuid}
+          else
+            params = { aws_file_uuid: uuid }
+          end
+          return empty_object if params.empty?
+
           response = AsynkRequest.sync_request(base_path, :create, params)
           raise CreationError.message_from_asynk_response(response) unless response.success?
-          response
+          self.new(response)
         end
         #
         # creates media file
@@ -65,9 +75,10 @@ module S3MediaServerApi
         # returns: response with file information
         #
         def resolve(uuid)
+          return empty_object unless uuid
           cache_key = "#{media_type}/#{uuid}"
           Config.cache_class.fetch(cache_key) do
-            AsynkRequest.sync_request(base_path, :resolve, uuid: uuid)
+            self.new(AsynkRequest.sync_request(base_path, :resolve, uuid: uuid))
           end
         end
         #
@@ -94,6 +105,9 @@ module S3MediaServerApi
         end
 
         private
+          def empty_object
+            self.new(data: nil)
+          end
           #
           # specifies media type which methods will be called
           #
