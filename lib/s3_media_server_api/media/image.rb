@@ -42,6 +42,7 @@ module S3MediaServerApi
         # returns: response with copied image
         #
         def copy(uuid)
+          return unless uuid
           Image.new(custom_sync_request(:copy, uuid: uuid))
         end
         #
@@ -49,6 +50,7 @@ module S3MediaServerApi
         # parameters: uuid - uuid of file
         #
         def resize(uuid)
+          return unless uuid
           custom_async_request(:resize, uuid: uuid)
         end
 

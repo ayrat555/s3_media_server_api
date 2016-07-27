@@ -27,6 +27,7 @@ module S3MediaServerApi
         #             start_position - position where cut wil be made
         #
         def cut(uuid, duration:, start_position:)
+          return unless uuid
           params = {
                      uuid: uuid,
                      duration: duration,
