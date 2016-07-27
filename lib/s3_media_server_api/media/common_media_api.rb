@@ -66,6 +66,7 @@ module S3MediaServerApi
         # parameters: uuid - uuid of file
         #
         def destroy(uuid)
+          return unless uuid
           AsynkRequest.async_request(base_path, :destroy, uuid: uuid)
         end
         #
