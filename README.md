@@ -194,6 +194,11 @@ S3MediaServerApi::Media::Colllection.destroy(created_collection.uuid)
 # to create aws file from its path, use upload method from S3MediaServerApi::Uploader module
 aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
 
+# to create aws file from its url, use upload_from_url method from S3MediaServerApi::Uploader module
+image_url = "https://d2l3jyjp24noqc.cloudfront.net/uploads/image/img/269/Test-Driven_APIs_with_Phoenix_and_Elixir.png"
+file = S3MediaServerApi::Uploader.upload_from_url(image_url)
+
+
 # to resolve aws file, use resolve method
 resolved_aws_file =  S3MediaServerApi::AwsFile.resolve(aws_file.uuid)
 

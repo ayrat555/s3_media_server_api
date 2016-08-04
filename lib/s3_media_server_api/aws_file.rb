@@ -41,6 +41,10 @@ module S3MediaServerApi
       @params
     end
 
+    def exists?
+      !@params.empty?
+    end
+
     class << self
       class AwsFileError < S3MediaServerApiError; end
       class FileCreationError < AwsFileError; end

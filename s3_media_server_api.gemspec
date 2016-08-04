@@ -24,5 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'parallel'
   spec.add_dependency 'mimemagic'
   spec.add_dependency 'faraday'
+  spec.add_dependency 'curb'
   spec.add_dependency 'simple_file_uploader'
 end

@@ -13,6 +13,13 @@ module S3MediaServerApi
 
       class UploaderError < S3MediaServerApiError; end
       class PartUploadError < UploaderError; end
+
+      def upload_from_url(url)
+        file = S3MediaServerApi::Downloader.download_by_url(url)
+        upload(file)
+      ensure
+        S3MediaServerApi::Downloader.remove_if_exists(file)
+      end
       #
       # uploads file to amazon s3 and create AwsFile object
       # parameter : filepath - file path in file system

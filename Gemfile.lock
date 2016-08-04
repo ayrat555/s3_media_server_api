@@ -1,8 +1,9 @@
 PATH
   remote: .
   specs:
-    s3_media_server_api (0.1.0.3)
+    s3_media_server_api (0.1.2.2)
       asynk (>= 0.0.1)
+      curb
       faraday
       mimemagic
       parallel
@@ -49,18 +50,19 @@ GEM
       timers (>= 4.1.1)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
+    curb (0.9.3)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     hitimes (1.2.4)
     i18n (0.7.0)
     json (1.8.3)
-    mimemagic (0.3.1)
+    mimemagic (0.3.2)
     minitest (5.9.0)
     multipart-post (2.0.0)
     nio4r (1.2.1)
     parallel (1.9.0)
     rake (10.5.0)
-    simple_file_uploader (0.0.1)
+    simple_file_uploader (0.0.2)
       bunny
     thread_safe (0.3.5)
     timers (4.1.1)
@@ -78,4 +80,4 @@ DEPENDENCIES
   s3_media_server_api!
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

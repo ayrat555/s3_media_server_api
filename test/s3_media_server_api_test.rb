@@ -108,4 +108,13 @@ class S3MediaServerApiTest < Minitest::Test
     assert collection.uuid
     assert S3MediaServerApi::Media::Collection.destroy(collection.uuid)
   end
+
+  def test_upload_file_from_http_url
+    image_url = "https://d2l3jyjp24noqc.cloudfront.net/uploads/image/img/269/Test-Driven_APIs_with_Phoenix_and_Elixir.png"
+    file = S3MediaServerApi::Uploader.upload_from_url(image_url)
+    assert file.exists?
+
+    S3MediaServerApi::Media::Document.create(file.uuid)
+    S3MediaServerApi::Media::Document.destroy(file.uuid)
+  end
 end
