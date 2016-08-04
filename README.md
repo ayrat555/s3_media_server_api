@@ -170,6 +170,13 @@ Use S3MediaServerApi::Media::Collection to interact with Collection resource
 owner_uuid = "4edbfdf9-9517-4902-8e92-2212215b0de5"
 collection = S3MediaServerApi::Media::Collection.create(owner_uuid)
 
+# to add new element to the collection, use add_item method
+# firstly create aws_file then provide its uuid and kind of media you want to create
+# method returns media file object that was created
+# available media types
+#                      images, documents, videos, audios
+params = { kind: 'images', media_file_uuid: aws_file.uuid }
+image =  S3MediaServerApi::Media::Collection.add_item(collection.uuid, params)
 
 # to resolve document, use resolve method
 resolved_collection = S3MediaServerApi::Media::Collection.resolve(created_collection.uuid)
@@ -197,7 +204,6 @@ aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_
 # to create aws file from its url, use upload_from_url method from S3MediaServerApi::Uploader module
 image_url = "https://d2l3jyjp24noqc.cloudfront.net/uploads/image/img/269/Test-Driven_APIs_with_Phoenix_and_Elixir.png"
 file = S3MediaServerApi::Uploader.upload_from_url(image_url)
-
 
 # to resolve aws file, use resolve method
 resolved_aws_file =  S3MediaServerApi::AwsFile.resolve(aws_file.uuid)

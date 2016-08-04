@@ -106,7 +106,16 @@ class S3MediaServerApiTest < Minitest::Test
     assert collection
     assert collection.owner_uuid, owner_uuid
     assert collection.uuid
+
+    aws_file = S3MediaServerApi::Uploader.upload('/Users/ayrat/Development/s3_media_server_api/tmp/test_image.jpg')
+    params = { kind: 'images', media_file_uuid: aws_file.uuid }
+    image =  S3MediaServerApi::Media::Collection.add_item(collection.uuid, params)
+
+    collection_with_image = S3MediaServerApi::Media::Collection.resolve(collection.uuid)
+    refute collection_with_image.images.empty?
+
     assert S3MediaServerApi::Media::Collection.destroy(collection.uuid)
+    assert S3MediaServerApi::Media::Image.destroy(image.uuid)
   end
 
   def test_upload_file_from_http_url

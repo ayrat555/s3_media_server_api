@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    s3_media_server_api (0.1.2.2)
+    s3_media_server_api (0.1.2.3)
       asynk (>= 0.0.1)
       curb
       faraday
