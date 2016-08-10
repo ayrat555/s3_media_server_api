@@ -1,8 +1,8 @@
-# S3MediaServerApi - - a Ruby client for the S3 Media Server
+# S3MediaServerApi - a Ruby client for the S3 Media Server
 
 S3MediaServerApi helps you write apps that need to interact with S3 Media Server.
 
-
+NOTE: This gem was used in my previous company's internal projects. It requires s3_media_server project that currently isn't open source
 ## Installation
 
 Add this line to your application's Gemfile:
